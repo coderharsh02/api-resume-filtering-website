@@ -2,7 +2,7 @@ const fs = require("fs");
 const pdfParse = require("pdf-parse");
 const Applicant = require("../models/Applicant");
 
-const skills = [" C ", "C++", "Java", "Python", "Javascript", "database"];
+const skills = [" c ", "c++", "java", "python", "javascript", "database", 'html', 'css', 'android', 'git'];
 
 const index = (req, res, next) => {
   Applicant.find()
@@ -38,7 +38,7 @@ const store = (req, res, next) => {
     pdfFile = fs.readFileSync("uploads/" + req.file.filename);
     pdfParse(pdfFile)
       .then((data) => {
-        pdfText = data.text;
+        pdfText = data.text.toLowerCase();
         applicant.skills = skills.filter((skill) => pdfText.includes(skill));
         applicant.resume = req.file.path;
 
@@ -78,7 +78,7 @@ const update = (req, res, next) => {
         pdfText = data.text;
         console;
         updatedData.skills = skills.filter((skill) => pdfText.includes(skill));
-        console.log("req.file.path" , updatedData.skills);
+        console.log("req.file.path", updatedData.skills);
         updatedData.resume = req.file.path;
         Applicant.findByIdAndUpdate(applicantID, { $set: updatedData })
           .then(() => {
